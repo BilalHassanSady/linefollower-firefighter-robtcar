@@ -1,0 +1,94 @@
+const int LeftMotorForward =A0;//the firist motor controller pin 1
+const int LeftMotorBackward =A1;//the firise motor controller pin 2
+const int RightMotorForward =A2;//the second motor controller pin 1
+const int RightMotorBackward =A3;//the second motor controller pin 1
+const int EnableAB =A4;
+
+const int sensor_right = 8;
+const int sensor_middle = 9;
+const int sensor_left = 7;
+
+const int flamese = 6;
+const int pump = 5;
+
+void mforward()
+{ 
+  //to make robot move forward
+  digitalWrite(LeftMotorForward, HIGH);
+  digitalWrite(RightMotorForward, HIGH);
+  digitalWrite(LeftMotorBackward, LOW);
+  digitalWrite(RightMotorBackward, LOW);
+  Serial.println("go forward!");
+}
+
+void mleft()
+{
+  //to move robot left
+  digitalWrite(RightMotorForward, HIGH);
+  digitalWrite(LeftMotorForward, LOW);
+  
+  Serial.println("go left!");
+}
+void mright()
+{
+  //to move robot right
+  digitalWrite(LeftMotorForward, HIGH);
+   digitalWrite(RightMotorForward, LOW);
+  
+  
+}
+void mstop()
+{
+ //to stop the robot
+  digitalWrite(RightMotorForward, LOW);
+  digitalWrite(LeftMotorForward, LOW);
+  digitalWrite(RightMotorBackward, LOW);
+  digitalWrite(LeftMotorBackward, LOW);
+  Serial.println("Stop!");
+}
+
+void setup()
+{ 
+  pinMode(flamese,INPUT);
+  pinMode(RightMotorForward, OUTPUT);
+  pinMode(LeftMotorForward, OUTPUT);
+  pinMode(LeftMotorBackward, OUTPUT);
+  pinMode(RightMotorBackward, OUTPUT);
+  pinMode(EnableAB,OUTPUT);
+  digitalWrite(EnableAB,1);
+  delay(100);
+}
+void loop()
+{
+  int right_state = digitalRead(sensor_right);
+  int left_state = digitalRead(sensor_left);
+  int middle_state = digitalRead(sensor_middle);
+
+  if(right_state == 0 && left_state == 1 && middle_state == 1)
+  {
+    mright();
+  }
+  if(right_state == 1 && left_state == 0 && middle_state == 1)
+  {
+    mleft();
+  }
+    if(right_state == 1 && left_state == 1 && middle_state == 0)
+  {
+  mforward(); 
+  }
+  if(right_state == 1 && left_state == 1 && middle_state == 1)
+  {
+  mstop();
+  }
+  fire_fight();
+}
+
+void fire_fight(){
+  int x = digitalRead(flamese);
+  if(x==1){
+    digitalWrite(pump,1);
+  }
+  else{
+    digitalWrite(pump,0);
+  }
+}
